@@ -21,7 +21,7 @@ class EmailLogin implements LoginMethodInterface
         return true;
     }
 
-    public static function markAsChosen(object $user): bool
+    public static function createNewAttempt(object $user): bool
     {
         self::checkUserArgumentClass($user);
         // TODO: Implement markAsChosen() method.

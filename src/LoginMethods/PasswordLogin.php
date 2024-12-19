@@ -21,7 +21,7 @@ class PasswordLogin implements LoginMethodInterface
         return !empty($user->password);
     }
 
-    public static function markAsChosen(object $user): bool
+    public static function createNewAttempt(object $user): bool
     {
         self::checkUserArgumentClass($user);
         // TODO: Implement markAsChosen() method.

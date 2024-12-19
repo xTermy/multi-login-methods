@@ -20,7 +20,7 @@ class SMSLogin implements LoginMethodInterface
         return !empty($user->phone);
     }
 
-    public static function markAsChosen(object $user): bool
+    public static function createNewAttempt(object $user): bool
     {
         self::checkUserArgumentClass($user);
         // TODO: Implement markAsChosen() method.

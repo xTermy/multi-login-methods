@@ -11,6 +11,7 @@ class MultiLoginMethodsServiceProvider extends PackageServiceProvider
         $package
             ->name('multi-login-methods')
             ->hasConfigFile('multiLoginMethods')
-            ->hasRoute('api');
+            ->hasRoute('api')
+            ->hasMigration('create_login_attempts_table');
     }
 }
