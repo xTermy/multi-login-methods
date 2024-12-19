@@ -3,7 +3,7 @@
 namespace StormCode\MultiLoginMethods\Traits;
 
 use StormCode\MultiLoginMethods\LoginMethodInterface;
-use App\Exceptions\System\WrongLoginMethodException;
+use StormCode\MultiLoginMethods\Exceptions\System\WrongLoginMethodException;
 use Exception;
 use Illuminate\Support\Facades\Config;
 
@@ -15,7 +15,7 @@ trait MultipleLoginMethods
             throw new WrongLoginMethodException('Login method class ' . $methodClass . ' not implements LoginMethodInterface');
         }
     }
-    
+
     /**
      * @throws Exception
      */

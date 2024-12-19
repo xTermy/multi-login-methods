@@ -10,7 +10,7 @@ class MultiLoginMethodsServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('multi-login-methods')
-            ->hasConfigFile('multiLoginMethods') // Plik konfiguracyjny
-            ->hasRoute('api'); // Plik routingu
+            ->hasConfigFile('multiLoginMethods')
+            ->hasRoute('api');
     }
 }

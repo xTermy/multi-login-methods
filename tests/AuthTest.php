@@ -2,10 +2,10 @@
 
 namespace StormCode\MultiLoginMethods\Tests;
 
+use Illuminate\Support\Facades\Config;
 use StormCode\MultiLoginMethods\LoginMethods\EmailLogin;
 use StormCode\MultiLoginMethods\LoginMethods\PasswordLogin;
 use StormCode\MultiLoginMethods\LoginMethods\SMSLogin;
-use App\Models\System\User;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -32,7 +32,9 @@ class AuthTest extends TestCase
     #[DataProvider('userAccountDataProvider')]
     public function test_getting_allowed_login_methods(string $email, string|null $phone, string|null $password, array $availableMethodsOutput): void
     {
-        $user = User::factory()->create([
+        $userClass = Config::string('multiLoginMethods.auth_model');
+
+        $user = $userClass::factory()->create([
             'email' => $email,
             'phone' => $phone,
             'password' => $password,

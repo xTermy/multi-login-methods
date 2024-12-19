@@ -2,7 +2,6 @@
 
 namespace StormCode\MultiLoginMethods\LoginMethods;
 
-use App\Models\System\User;
 use StormCode\MultiLoginMethods\Traits\LoginMethodsTools;
 use StormCode\MultiLoginMethods\LoginMethodInterface;
 
