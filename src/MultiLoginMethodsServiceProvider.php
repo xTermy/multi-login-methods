@@ -4,14 +4,13 @@ namespace StormCode\MultiLoginMethods;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class MultiLoginMethodsServiceProvider
+class MultiLoginMethodsServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('multiLoginMethods') // Nazwa pakietu
-            ->hasConfigFile() // Czy pakiet ma plik konfiguracyjny
-            ->hasRoute('api')
-        ; // Routing pakietu
+            ->name('multi-login-methods')
+            ->hasConfigFile('multiLoginMethods') // Plik konfiguracyjny
+            ->hasRoute('api'); // Plik routingu
     }
 }
