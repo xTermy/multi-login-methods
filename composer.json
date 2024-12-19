@@ -1,0 +1,22 @@
+{
+    "name": "stormcode/multi-login-methods",
+    "description": "Simple package that allows to make classes for multiple login methods",
+    "type": "laravel-package",
+    "require": {
+        "spatie/laravel-package-tools": "^1.17",
+        "php": "^8.3",
+        "laravel/framework": "^11",
+        "teckwei1993/laravel-otp": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "StormCode\\MultiLoginMethods\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mikołaj Salamak",
+            "email": "mikolaj.salamak@stormcode.pl"
+        }
+    ]
+}
