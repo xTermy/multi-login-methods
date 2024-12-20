@@ -17,4 +17,9 @@ trait LoginMethodsTools
 
         return true;
     }
+
+    private static function generateRandomCode(int $minLength, int $maxLength): string
+    {
+        return (string) rand(pow(10, $minLength - 1), pow(10, $maxLength) - 1);
+    }
 }

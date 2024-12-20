@@ -2,6 +2,7 @@
 
 namespace StormCode\MultiLoginMethods\Tests;
 
+use App\Models\System\User;
 use Illuminate\Support\Facades\Config;
 use StormCode\MultiLoginMethods\LoginMethods\EmailLogin;
 use StormCode\MultiLoginMethods\LoginMethods\PasswordLogin;
@@ -41,5 +42,29 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertEquals($user->getAllowedLoginMethods(), $availableMethodsOutput);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[DataProvider('userAccountDataProvider')]
+    public function test_make_login_method_choice(string $email, string|null $phone, string|null $password, array $availableMethodsOutput): void
+    {
+        $userClass = Config::string('multiLoginMethods.auth_model');
+
+        /** @var User $user */
+        $user = $userClass::factory()->create([
+            'email' => $email,
+            'phone' => $phone,
+            'password' => $password,
+        ]);
+
+        foreach($availableMethodsOutput as $methodClass) {
+            $token = $user->chooseLoginMethod($methodClass);
+
+            $this->assertTrue(gettype($token) === 'string');
+            $this->assertTrue(strlen($token) > 0);
+            $this->assertIsArray(decrypt($token));
+        }
     }
 }

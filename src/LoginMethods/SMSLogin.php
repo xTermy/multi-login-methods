@@ -2,8 +2,10 @@
 
 namespace StormCode\MultiLoginMethods\LoginMethods;
 
+use Illuminate\Support\Facades\Config;
 use StormCode\MultiLoginMethods\Traits\LoginMethodsTools;
 use StormCode\MultiLoginMethods\LoginMethodInterface;
+use StormCode\MultiLoginMethods\Models\LoginAttempt;
 
 class SMSLogin implements LoginMethodInterface
 {
@@ -20,9 +22,18 @@ class SMSLogin implements LoginMethodInterface
         return !empty($user->phone);
     }
 
-    public static function createNewAttempt(object $user): bool
+    public static function createNewAttempt(object $user): string
     {
         self::checkUserArgumentClass($user);
-        // TODO: Implement markAsChosen() method.
+
+        $loginAttempt = LoginAttempt::create([
+            'user_id' => $user->id,
+            'tries' => 0,
+            'method' => self::class,
+            'code' => self::generateRandomCode(Config::integer('multi_login_methods.minCodeLength', 6), Config::integer('multi_login_methods.maxCodeLength', 6)),
+            'ip' => request()->getClientIp(),
+        ]);
+
+        return $loginAttempt->toToken();
     }
 }

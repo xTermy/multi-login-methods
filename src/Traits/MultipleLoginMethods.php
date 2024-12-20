@@ -16,6 +16,13 @@ trait MultipleLoginMethods
         }
     }
 
+    private function checkIfLoginMethodIsAllowed(string $methodClass): void
+    {
+        if (!in_array($methodClass, $this->getAllowedLoginMethods())) {
+            throw new WrongLoginMethodException('Login method class ' . $methodClass . ' is not allowed.');
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -33,13 +40,12 @@ trait MultipleLoginMethods
         return $allowedMethods;
     }
 
-    public function chooseLoginMethod(string $methodName): LoginMethodInterface
+    public function chooseLoginMethod(string $methodClass): string
     {
-        $allowedMethods = $this->getAllowedLoginMethods();
-        foreach ($allowedMethods as $method) {
-            if ($method::getLoginMethodId() === $methodName) {
-                return $method::markAsChosen($this);
-            }
-        }
+        $this->checkIfLoginMethodIsAllowed($methodClass);
+
+        $token = $methodClass::createNewAttempt($this);
+
+        return $token;
     }
 }

@@ -2,8 +2,10 @@
 
 namespace StormCode\MultiLoginMethods\LoginMethods;
 
+use Illuminate\Support\Facades\Config;
 use StormCode\MultiLoginMethods\Traits\LoginMethodsTools;
 use StormCode\MultiLoginMethods\LoginMethodInterface;
+use StormCode\MultiLoginMethods\Models\LoginAttempt;
 
 class PasswordLogin implements LoginMethodInterface
 {
@@ -21,9 +23,18 @@ class PasswordLogin implements LoginMethodInterface
         return !empty($user->password);
     }
 
-    public static function createNewAttempt(object $user): bool
+    public static function createNewAttempt(object $user): string
     {
         self::checkUserArgumentClass($user);
-        // TODO: Implement markAsChosen() method.
+
+        $loginAttempt = LoginAttempt::create([
+            'user_id' => $user->id,
+            'tries' => 0,
+            'method' => self::class,
+            'code' => null,
+            'ip' => request()->getClientIp(),
+        ]);
+
+        return $loginAttempt->toToken();
     }
 }

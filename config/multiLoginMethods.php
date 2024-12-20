@@ -7,4 +7,6 @@ return [
     ],
     'auth_model' => \App\Models\User::class,
     'auth_model_table' => 'users',
+    'minCodeLength' => 6,
+    'maxCodeLength' => 6,
 ];
