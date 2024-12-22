@@ -2,6 +2,7 @@
 
 namespace StormCode\MultiLoginMethods\LoginMethods;
 
+use http\Exception\RuntimeException;
 use Illuminate\Support\Facades\Config;
 use StormCode\MultiLoginMethods\Traits\LoginMethodsTools;
 use StormCode\MultiLoginMethods\LoginMethodInterface;
@@ -33,6 +34,13 @@ class SMSLogin implements LoginMethodInterface
             'code' => self::generateRandomCode(Config::integer('multi_login_methods.minCodeLength', 6), Config::integer('multi_login_methods.maxCodeLength', 6)),
             'ip' => $ip,
         ]);
+
+        $sendDriver = Config::string('multiLoginMethods.send_drivers.'.self::class);
+        if (isset($sendDriver)) {
+            $sendDriver::send($user->phone, $loginAttempt->code);
+        } else {
+            throw new RuntimeException('SMS login method send driver not found.');
+        }
 
         return $loginAttempt->toToken();
     }

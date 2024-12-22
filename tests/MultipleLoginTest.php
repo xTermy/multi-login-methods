@@ -64,8 +64,9 @@ class MultipleLoginTest extends TestCase
             'password' => $password,
         ]);
 
+        $ip = $this->faker->ipv4();
         foreach($availableMethodsOutput as $methodClass) {
-            $token = $user->chooseLoginMethod($methodClass);
+            $token = $user->chooseLoginMethod($methodClass, $ip);
 
             $this->assertTrue(gettype($token) === 'string');
             $this->assertTrue(strlen($token) > 0);

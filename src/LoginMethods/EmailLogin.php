@@ -2,6 +2,7 @@
 
 namespace StormCode\MultiLoginMethods\LoginMethods;
 
+use http\Exception\RuntimeException;
 use StormCode\MultiLoginMethods\Traits\LoginMethodsTools;
 use StormCode\MultiLoginMethods\LoginMethodInterface;
 use StormCode\MultiLoginMethods\Models\LoginAttempt;
@@ -34,6 +35,13 @@ class EmailLogin implements LoginMethodInterface
             'code' => self::generateRandomCode(Config::integer('multi_login_methods.minCodeLength', 6), Config::integer('multi_login_methods.maxCodeLength', 6)),
             'ip' => $ip,
         ]);
+
+        $sendDriver = Config::string('multiLoginMethods.send_drivers.'.self::class);
+        if (isset($sendDriver)) {
+            $sendDriver::send($user->email, $loginAttempt->code);
+        } else {
+            throw new RuntimeException('Email login method send driver not found.');
+        }
 
         return $loginAttempt->toToken();
     }
