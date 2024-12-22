@@ -3,6 +3,7 @@
 namespace StormCode\MultiLoginMethods;
 
 use Illuminate\Support\Facades\Config;
+use StormCode\MultiLoginMethods\Exceptions\WrongLoginMethodException;
 use StormCode\MultiLoginMethods\Models\LoginAttempt;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -36,9 +37,14 @@ class AttemptService
         return false;
     }
 
+
     private function maxAttemptsExceeded(): bool
     {
-        return $this->loginAttempt->tries > Config::integer('multiLoginMethods.max_attempts', 3);
+        if($this->loginAttempt->tries > Config::integer('multiLoginMethods.max_attempts', 3)) {
+            throw new WrongLoginMethodException();
+        } else {
+            return false;
+        }
     }
 
     private function confirmIpMatch(string $attemptIp): bool

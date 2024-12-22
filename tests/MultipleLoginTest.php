@@ -1,21 +1,15 @@
 <?php
 
-namespace StormCode\MultiLoginMethods\Tests;
-
-use App\Models\System\User;
 use Illuminate\Support\Facades\Config;
-use PHPUnit\Framework\Attributes\Depends;
 use StormCode\MultiLoginMethods\AttemptService;
 use StormCode\MultiLoginMethods\LoginMethods\EmailLogin;
 use StormCode\MultiLoginMethods\LoginMethods\PasswordLogin;
 use StormCode\MultiLoginMethods\LoginMethods\SMSLogin;
-use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\DataProvider;
 use StormCode\MultiLoginMethods\Models\LoginAttempt;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MultipleLoginTest extends TestCase
@@ -57,7 +51,6 @@ class MultipleLoginTest extends TestCase
     {
         $userClass = Config::string('multiLoginMethods.auth_model');
 
-        /** @var User $user */
         $user = $userClass::factory()->create([
             'email' => $email,
             'phone' => $phone,
@@ -82,7 +75,6 @@ class MultipleLoginTest extends TestCase
     {
         $userClass = Config::string('multiLoginMethods.auth_model');
 
-        /** @var User $user */
         $user = $userClass::factory()->create([
             'email' => $email,
             'phone' => $phone,
