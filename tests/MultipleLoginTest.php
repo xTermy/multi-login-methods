@@ -100,18 +100,19 @@ class MultipleLoginTest extends TestCase
             $loginAttempt = $loginAttempt->fresh();
             $this->assertTrue($loginAttempt->tries === 0);
 
-            $attemptService = new AttemptService();
-            $this->assertFalse($attemptService->checkLoginAttempt($token, $ip, $wrongPasscode));
+            $attemptService = new AttemptService($token);
+            $this->assertFalse($attemptService->checkLoginAttempt($ip, $wrongPasscode));
 
             $loginAttempt = $loginAttempt->fresh();
             $this->assertTrue($loginAttempt->tries === 1);
 
-            $this->assertTrue($attemptService->checkLoginAttempt($token, $ip, $passcode));
+            $attemptService = new AttemptService($token);
+            $this->assertTrue($attemptService->checkLoginAttempt($ip, $passcode));
 
             $loginAttempt = $loginAttempt->fresh();
             $this->assertTrue($loginAttempt->tries === 2);
 
-            $this->assertThrows(fn() => $attemptService->checkLoginAttempt($token, $ip, $wrongPasscode), ModelNotFoundException::class);
+            $this->assertThrows(fn() => new AttemptService($token), ModelNotFoundException::class);
 
             $loginAttempt = $loginAttempt->fresh();
             $this->assertTrue($loginAttempt->tries === 2);

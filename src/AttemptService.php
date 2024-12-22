@@ -11,10 +11,16 @@ class AttemptService
 {
     private LoginAttempt $loginAttempt;
 
-    public function checkLoginAttempt(string $token, string $attemptIp, string $code): bool
+    public function __construct(string $token)
     {
         $this->loginAttempt = LoginAttempt::fromToken($token);
+    }
 
+    /**
+     * @throws WrongLoginMethodException
+     */
+    public function checkLoginAttempt(string $attemptIp, string $code): bool
+    {
         if (!isset($this->loginAttempt)) {
             throw new NotFoundHttpException('Login attempt not found');
         }
