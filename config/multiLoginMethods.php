@@ -9,4 +9,5 @@ return [
     'auth_model_table' => 'users',
     'minCodeLength' => 6,
     'maxCodeLength' => 6,
+    'max_attempts' => 3,
 ];

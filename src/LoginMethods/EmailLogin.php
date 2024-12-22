@@ -23,7 +23,7 @@ class EmailLogin implements LoginMethodInterface
         return true;
     }
 
-    public static function createNewAttempt(object $user): string
+    public static function createNewAttempt(object $user, string $ip): string
     {
         self::checkUserArgumentClass($user);
 
@@ -32,9 +32,18 @@ class EmailLogin implements LoginMethodInterface
             'tries' => 0,
             'method' => self::class,
             'code' => self::generateRandomCode(Config::integer('multi_login_methods.minCodeLength', 6), Config::integer('multi_login_methods.maxCodeLength', 6)),
-            'ip' => request()->getClientIp(),
+            'ip' => $ip,
         ]);
 
         return $loginAttempt->toToken();
+    }
+
+    public static function checkAttempt(LoginAttempt $loginAttempt, string $passcode): bool
+    {
+        if ($loginAttempt->code === $passcode) {
+            return true;
+        }
+
+        return false;
     }
 }

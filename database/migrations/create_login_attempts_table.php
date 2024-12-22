@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('method');
             $table->string('code')->nullable();
             $table->ipAddress('ip');
+            $table->boolean('succeed')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on(Config::string('multiLoginMethods.auth_model_table', 'users'))->onDelete('cascade');

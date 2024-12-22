@@ -40,11 +40,11 @@ trait MultipleLoginMethods
         return $allowedMethods;
     }
 
-    public function chooseLoginMethod(string $methodClass): string
+    public function chooseLoginMethod(string $methodClass, string $ip): string
     {
         $this->checkIfLoginMethodIsAllowed($methodClass);
 
-        $token = $methodClass::createNewAttempt($this);
+        $token = $methodClass::createNewAttempt($this, $ip);
 
         return $token;
     }

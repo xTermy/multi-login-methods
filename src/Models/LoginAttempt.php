@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\Config;
 
 class LoginAttempt extends Model
 {
-    protected $table = 'login_attempts'; // Powiązanie z tabelą
+    protected $table = 'login_attempts';
     protected $fillable = [
         'user_id',
         'tries',
         'method',
         'code',
         'ip',
+        'succeed',
     ];
     protected function casts()
     {
@@ -24,12 +25,19 @@ class LoginAttempt extends Model
             'method' => 'string',
             'code' => 'string',
             'ip' => 'string',
+            'succeed' => 'boolean',
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(Config::string('multiLoginMethods.auth_model', App\Models\User::class));
+    }
+
+    public static function fromToken(string $token): ?self
+    {
+        $tokenData = decrypt($token);
+        return self::where('id', $tokenData['attempt_id'])->where('user_id', $tokenData['user_id'])->where('succeed', false)->firstOrFail();
     }
 
     public function toToken(): string

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use StormCode\MultiLoginMethods\Traits\LoginMethodsTools;
 use StormCode\MultiLoginMethods\LoginMethodInterface;
 use StormCode\MultiLoginMethods\Models\LoginAttempt;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordLogin implements LoginMethodInterface
 {
@@ -23,7 +24,7 @@ class PasswordLogin implements LoginMethodInterface
         return !empty($user->password);
     }
 
-    public static function createNewAttempt(object $user): string
+    public static function createNewAttempt(object $user, string $ip): string
     {
         self::checkUserArgumentClass($user);
 
@@ -32,9 +33,14 @@ class PasswordLogin implements LoginMethodInterface
             'tries' => 0,
             'method' => self::class,
             'code' => null,
-            'ip' => request()->getClientIp(),
+            'ip' => $ip,
         ]);
 
         return $loginAttempt->toToken();
+    }
+
+    public static function checkAttempt(LoginAttempt $loginAttempt, string $passcode): bool
+    {
+        return Hash::check($passcode, $loginAttempt->user->password);
     }
 }
