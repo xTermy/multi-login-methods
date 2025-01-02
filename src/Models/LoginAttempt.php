@@ -34,10 +34,11 @@ class LoginAttempt extends Model
         return $this->belongsTo(Config::string('multiLoginMethods.auth_model', App\Models\User::class));
     }
 
-    public static function fromToken(string $token): ?self
+
+    public static function fromToken(string $token, bool $success = false): ?self
     {
         $tokenData = decrypt($token);
-        return self::where('id', $tokenData['attempt_id'])->where('user_id', $tokenData['user_id'])->where('succeed', false)->firstOrFail();
+        return self::where('id', $tokenData['attempt_id'])->where('user_id', $tokenData['user_id'])->where('succeed', $success)->firstOrFail();
     }
 
     public function toToken(): string
