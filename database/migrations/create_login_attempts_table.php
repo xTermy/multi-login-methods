@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignUuid('user_id');
+            $table->integer('tries')->default(0);
             $table->string('method');
             $table->string('code')->nullable();
             $table->ipAddress('ip');
